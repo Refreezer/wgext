@@ -26,9 +26,12 @@ def generate_keys():
 
 # find last ip
 with open(CONF_PATH, "r", encoding="utf-8") as server_conf_file:
-    max_ip = list(sorted(map(lambda line: ALLOWED_IPS_PREFIX.sub("", line).replace(" ", ""), filter(lambda line: "AllowedIPs" in line, server_conf_file.readlines())), reverse=True))[0]
+    sorted_ips = list(sorted(map(lambda line: ALLOWED_IPS_PREFIX.sub("", line).replace(" ", ""), filter(lambda line: "AllowedIPs" in line, server_conf_file.readlines())), reverse=True, key=lambda ip_str : int(ip_str[ip_str.rfind(".")+1:ip_str.rfind("/")])))
+    max_ip = sorted_ips[0]
 
 last_ip_seg = int(IP_REGEX.match(max_ip).group(2)) + 1
+print(f"new {last_ip_seg=}")
+
 next_ip = IP_REGEX.sub(rf"\g<1>{last_ip_seg}", max_ip).replace("\n", "")
 private_key, public_key, psk = generate_keys()
 
