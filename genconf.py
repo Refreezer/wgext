@@ -34,8 +34,8 @@ private_key, public_key, psk = generate_keys()
 
 # generate configs
 environment = jinja2.Environment(loader=jinja2.FileSystemLoader("templates/"))
-client_template = environment.get_template("client_configuration.conf")
-server_template = environment.get_template("server_configuration.conf")
+client_template = environment.get_template("client_configuration.config")
+server_template = environment.get_template("server_configuration.config")
 client_conf = client_template.render(
     next_ip=f"{next_ip}/24\n",
     private_peer_key=private_key,
